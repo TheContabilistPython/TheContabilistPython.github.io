@@ -1,0 +1,155 @@
+/* Out of Your League: the brand page at the site root and its 404. Tokens and component classes come
+   from the Out of Your League design system (claude.ai artifact); the dashboards under /serie-a/ and
+   /serie-b/ use the same ones, and the same "tema" key, so an edition chosen here holds there too.
+   Every path is absolute from the root: GitHub serves /404.html for missing pages at any depth. */
+
+@font-face { font-family: "Archivo"; src: url("/fonts/archivo.woff") format("woff"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Archivo Expanded"; src: url("/fonts/archivo-expanded.woff") format("woff"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("/fonts/jetbrains-mono.woff") format("woff"); font-weight: 100 800; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("/fonts/instrument-serif.woff") format("woff"); font-weight: 400; font-display: swap; }
+
+/* ---- editions: Floodlight by default; Broadsheet when chosen, or when the OS is light and nothing is saved */
+:root, [data-theme="floodlight"] {
+  --ground: #0a0c0f; --surface: #12161b; --surface-hover: #161a20; --line: #20262e; --line-strong: #606a78;
+  --ink: #f3f3ef; --ink-strong: #ffffff; --ink-muted: #7f8995; --data-dot: #e8e8e3;
+  --accent: #c6f24e; --focus-ring: 0 0 0 2px #0a0c0f, 0 0 0 4px #c6f24e;
+  --head-font: var(--font-display); --head-case: uppercase; --head-weight: 800; --head-track: -0.005em; --head-scale: 1;
+  color-scheme: dark;
+}
+[data-theme="broadsheet"] {
+  --ground: #f4efe6; --surface: #fbf8f2; --surface-hover: #eee8dc; --line: #dad2c4; --line-strong: #8b8375;
+  --ink: #16212b; --ink-strong: #16212b; --ink-muted: #6f685a; --data-dot: #16212b;
+  --accent: #bd3a2a; --focus-ring: 0 0 0 2px #f4efe6, 0 0 0 4px #16212b;
+  --head-font: var(--font-serif); --head-case: none; --head-weight: 400; --head-track: -0.012em; --head-scale: 1.3;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --ground: #f4efe6; --surface: #fbf8f2; --surface-hover: #eee8dc; --line: #dad2c4; --line-strong: #8b8375;
+    --ink: #16212b; --ink-strong: #16212b; --ink-muted: #6f685a; --data-dot: #16212b;
+    --accent: #bd3a2a; --focus-ring: 0 0 0 2px #f4efe6, 0 0 0 4px #16212b;
+    --head-font: var(--font-serif); --head-case: none; --head-weight: 400; --head-track: -0.012em; --head-scale: 1.3;
+    color-scheme: light;
+  }
+}
+:root {
+  --font-display: "Archivo Expanded", "Archivo", system-ui, sans-serif;
+  --font-sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 72px;
+  --radius-sm: 4px; --radius-md: 8px; --content-max: 1120px;
+}
+
+/* ---- base */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--ground); }
+body {
+  margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+  background: var(--ground); color: var(--ink); font: 400 15px/1.5 var(--font-sans);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+a { color: inherit; }
+[hidden] { display: none !important; }
+.wrap { width: 100%; max-width: var(--content-max); margin: 0 auto; padding: 0 var(--space-4); }
+@media (min-width: 720px) { .wrap { padding: 0 var(--space-5); } }
+
+/* design system pieces the page uses */
+.ooyl-kicker { margin: 0; font: 600 11px/14px var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.ooyl-label { margin: 0; font: 600 11px/14px var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); }
+.ooyl-btn {
+  display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 14px;
+  border-radius: var(--radius-sm); border: 1px solid transparent; background: transparent; color: var(--ink-muted);
+  font: 600 13px/1 var(--font-sans); cursor: pointer; text-decoration: none;
+  transition: background-color .12s ease, color .12s ease;
+}
+.ooyl-btn:hover { color: var(--ink); background: var(--surface-hover); }
+.ooyl-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* ---- page */
+.top { padding-top: env(safe-area-inset-top, 0px); }
+.top .wrap { display: flex; justify-content: flex-end; align-items: center; min-height: 56px; }
+
+.hero { padding-top: var(--space-6); padding-bottom: var(--space-7); }  /* top and bottom only: the sides are .wrap's */
+@media (min-width: 720px) { .hero { padding-top: var(--space-7); padding-bottom: var(--space-8); } }
+.logo { margin: 0; line-height: 0; }
+.logo svg { display: block; width: min(100%, 540px); height: auto; }
+.logo__ring { fill: none; stroke: var(--data-dot); }
+.logo__dot { fill: var(--accent); }
+.logo__text { fill: var(--ink); }
+.lede { margin: var(--space-6) 0 0; max-width: 56ch; font-size: 17px; line-height: 1.55; color: var(--ink-muted); }
+
+.pick { padding-bottom: var(--space-8); }
+.pick > .ooyl-label { margin-bottom: var(--space-4); }
+.leagues { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) { .leagues { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); } }
+
+/* A league card: the heading's link stretches over the whole card, so the card clicks as one and
+   the link's name stays short ("Série A"). */
+.league {
+  position: relative; display: flex; flex-direction: column; gap: var(--space-5);
+  padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md);
+  transition: background-color .12s ease, border-color .12s ease;
+}
+@media (min-width: 720px) { .league { padding: var(--space-6); } }
+.league:hover { background: var(--surface-hover); border-color: var(--line-strong); }
+.league:focus-within { box-shadow: var(--focus-ring); }
+.league__head { display: flex; flex-direction: column; gap: var(--space-2); }
+.league__name {
+  margin: 0; color: var(--ink-strong);
+  font-family: var(--head-font); font-weight: var(--head-weight); text-transform: var(--head-case);
+  letter-spacing: var(--head-track); font-size: calc(40px * var(--head-scale)); line-height: 1;
+}
+.league__link { text-decoration: none; outline: none; }
+.league__link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-md); }
+.league__about { margin: 0; color: var(--ink-muted); font-size: 14px; line-height: 20px; }
+
+/* live numbers, filled from the league's api/index.json; the card stands without them */
+.league__stats {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.league__stats > div { padding: var(--space-3) var(--space-3) var(--space-3) 0; }
+.league__stats > div + div { padding-left: var(--space-3); border-left: 1px solid var(--line); }
+.league__stats dt { font: 600 10.5px/14px var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); }
+.league__stats dd {
+  margin: 6px 0 0; color: var(--ink-strong); font-family: var(--head-font); font-weight: var(--head-weight);
+  font-size: calc(26px * var(--head-scale)); line-height: 1; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap;
+}
+.league__stats dd small { font: 500 12px/1 var(--font-mono); color: var(--ink-muted); margin-left: 4px; }
+.league__leader { margin: 0; display: flex; align-items: center; gap: var(--space-2); font-size: 14px; line-height: 20px; color: var(--ink); }
+.league__leader img { width: 22px; height: 22px; object-fit: contain; flex: none; }
+.league__leader b { font-weight: 600; color: var(--ink-strong); }
+.league__go { margin-top: auto; font: 600 13px/1 var(--font-sans); color: var(--ink); }
+.league:hover .league__go { color: var(--accent); }
+
+.foot { margin-top: auto; border-top: 1px solid var(--line); }
+.foot .wrap {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-5);
+  padding-top: var(--space-5); padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+  font-size: 12.5px; color: var(--ink-muted);
+}
+.foot .handle { font-family: var(--font-mono); color: inherit; text-decoration: none; border-radius: 2px; }
+.foot .handle:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.foot .handle:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* 404 */
+.lost { padding-top: var(--space-7); padding-bottom: var(--space-8); }
+.lost .logo svg { width: min(100%, 320px); }
+.lost h1 {
+  margin: var(--space-7) 0 var(--space-3); color: var(--ink-strong);
+  font-family: var(--head-font); font-weight: var(--head-weight); text-transform: var(--head-case);
+  letter-spacing: var(--head-track); font-size: calc(32px * var(--head-scale)); line-height: 1.05;
+}
+.lost p { margin: 0 0 var(--space-5); max-width: 52ch; color: var(--ink-muted); }
+.lost ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.lost > .logo { display: inline-block; border-radius: var(--radius-sm); }
+.lost > .logo:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.lost ul a {
+  display: inline-flex; align-items: center; height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong); text-decoration: none; font-weight: 600; color: var(--ink);
+}
+.lost ul a:hover { background: var(--surface-hover); }
+.lost ul a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

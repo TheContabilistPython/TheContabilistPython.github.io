@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Out of Your League · Brasileirão em dados</title>
+<meta name="description" content="Brasileirão Série A e Série B em dados: tabela com xG, partidas, escalações, estatísticas dos jogadores e a simulação do resto da temporada.">
+<link rel="canonical" href="https://www.outofyourleague.com.br/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0c0f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Out of Your League">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://www.outofyourleague.com.br/">
+<meta property="og:title" content="Out of Your League · Brasileirão em dados">
+<meta property="og:description" content="Brasileirão Série A e Série B em dados: tabela com xG, partidas, escalações, estatísticas dos jogadores e a simulação do resto da temporada.">
+<meta property="og:image" content="https://www.outofyourleague.com.br/marca/compartilhamento.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo Out of Your League: um anel e um ponto verde que saiu dele">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ooyl_br">
+<script>
+  // A edicao salva entra antes da primeira pintura: a mesma chave "tema" dos dashboards desta origem.
+  try {
+    var saved = { dark: "floodlight", light: "broadsheet", floodlight: "floodlight", broadsheet: "broadsheet" }[localStorage.getItem("tema")];
+    if (saved) document.documentElement.setAttribute("data-theme", saved);
+  } catch (_) {}
+</script>
+<link rel="preload" href="/fonts/archivo-expanded.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <button class="ooyl-btn" id="tema" type="button" title="Alternar entre a edição escura e a clara">Tema</button>
+  </div>
+</header>
+<main>
+  <section class="hero wrap">
+    <h1 class="logo"><svg viewBox="0 0 451.59 112" role="img" aria-labelledby="logo-titulo" focusable="false"><title id="logo-titulo">Out of Your League</title><g transform="translate(-8 -8) scale(2)"><circle cx="26" cy="38" r="18" class="logo__ring" stroke-width="8"/><circle cx="51" cy="13" r="9" class="logo__dot"/></g><path class="logo__text" d="M167.33599999999998 51.14Q162.58399999999997 51.14 159.146 49.646Q155.708 48.152 153.85399999999998 45.29Q152.0 42.428 152.0 38.324Q152.0 34.22 153.85399999999998 31.357999999999997Q155.708 28.496 159.146 27.02Q162.58399999999997 25.544 167.33599999999998 25.544Q172.088 25.544 175.526 27.02Q178.964 28.496 180.81799999999998 31.357999999999997Q182.67199999999997 34.22 182.67199999999997 38.324Q182.67199999999997 42.428 180.81799999999998 45.29Q178.964 48.152 175.526 49.646Q172.088 51.14 167.33599999999998 51.14ZM167.33599999999998 45.812Q169.17199999999997 45.812 170.64799999999997 45.343999999999994Q172.124 44.876 173.18599999999998 43.976Q174.248 43.076 174.80599999999998 41.78Q175.36399999999998 40.484 175.36399999999998 38.828V37.784Q175.36399999999998 36.164 174.80599999999998 34.868Q174.248 33.572 173.18599999999998 32.672Q172.124 31.772 170.64799999999997 31.304Q169.17199999999997 30.836 167.33599999999998 30.836Q165.49999999999997 30.836 164.02399999999997 31.304Q162.54799999999997 31.772 161.486 32.672Q160.42399999999998 33.572 159.86599999999999 34.868Q159.308 36.164 159.308 37.784V38.828Q159.308 40.484 159.86599999999999 41.78Q160.42399999999998 43.076 161.486 43.976Q162.54799999999997 44.876 164.02399999999997 45.343999999999994Q165.49999999999997 45.812 167.33599999999998 45.812Z M201.03199999999998 51.14Q196.49599999999998 51.14 193.47199999999998 49.79Q190.44799999999998 48.44 188.91799999999998 45.866Q187.38799999999998 43.292 187.38799999999998 39.62V25.976H194.48V39.367999999999995Q194.48 42.391999999999996 196.19 44.102Q197.89999999999998 45.812 201.03199999999998 45.812Q204.2 45.812 205.892 44.102Q207.58399999999997 42.391999999999996 207.58399999999997 39.367999999999995V25.976H214.676V39.62Q214.676 43.292 213.164 45.866Q211.652 48.44 208.60999999999999 49.79Q205.56799999999998 51.14 201.03199999999998 51.14Z M228.392 50.708V31.7H218.42V25.976H245.456V31.7H235.48399999999998V50.708Z M273.356 51.14Q268.604 51.14 265.16599999999994 49.646Q261.72799999999995 48.152 259.87399999999997 45.29Q258.02 42.428 258.02 38.324Q258.02 34.22 259.87399999999997 31.357999999999997Q261.72799999999995 28.496 265.16599999999994 27.02Q268.604 25.544 273.356 25.544Q278.10799999999995 25.544 281.54599999999994 27.02Q284.984 28.496 286.83799999999997 31.357999999999997Q288.69199999999995 34.22 288.69199999999995 38.324Q288.69199999999995 42.428 286.83799999999997 45.29Q284.984 48.152 281.54599999999994 49.646Q278.10799999999995 51.14 273.356 51.14ZM273.356 45.812Q275.19199999999995 45.812 276.66799999999995 45.343999999999994Q278.14399999999995 44.876 279.20599999999996 43.976Q280.268 43.076 280.82599999999996 41.78Q281.38399999999996 40.484 281.38399999999996 38.828V37.784Q281.38399999999996 36.164 280.82599999999996 34.868Q280.268 33.572 279.20599999999996 32.672Q278.14399999999995 31.772 276.66799999999995 31.304Q275.19199999999995 30.836 273.356 30.836Q271.52 30.836 270.044 31.304Q268.568 31.772 267.506 32.672Q266.44399999999996 33.572 265.88599999999997 34.868Q265.328 36.164 265.328 37.784V38.828Q265.328 40.484 265.88599999999997 41.78Q266.44399999999996 43.076 267.506 43.976Q268.568 44.876 270.044 45.343999999999994Q271.52 45.812 273.356 45.812Z M293.51599999999996 50.708V25.976H316.376V31.304H300.60799999999995V36.379999999999995H314.57599999999996V41.672H300.60799999999995V50.708Z M335.67199999999997 50.708V40.844L324.152 25.976H332.46799999999996L339.236 35.228H339.48799999999994L346.292 25.976H354.248L342.76399999999995 40.844V50.708Z M370.84399999999994 51.14Q366.092 51.14 362.654 49.646Q359.21599999999995 48.152 357.36199999999997 45.29Q355.508 42.428 355.508 38.324Q355.508 34.22 357.36199999999997 31.357999999999997Q359.21599999999995 28.496 362.654 27.02Q366.092 25.544 370.84399999999994 25.544Q375.59599999999995 25.544 379.034 27.02Q382.472 28.496 384.32599999999996 31.357999999999997Q386.17999999999995 34.22 386.17999999999995 38.324Q386.17999999999995 42.428 384.32599999999996 45.29Q382.472 48.152 379.034 49.646Q375.59599999999995 51.14 370.84399999999994 51.14ZM370.84399999999994 45.812Q372.67999999999995 45.812 374.15599999999995 45.343999999999994Q375.63199999999995 44.876 376.69399999999996 43.976Q377.756 43.076 378.31399999999996 41.78Q378.87199999999996 40.484 378.87199999999996 38.828V37.784Q378.87199999999996 36.164 378.31399999999996 34.868Q377.756 33.572 376.69399999999996 32.672Q375.63199999999995 31.772 374.15599999999995 31.304Q372.67999999999995 30.836 370.84399999999994 30.836Q369.008 30.836 367.532 31.304Q366.056 31.772 364.99399999999997 32.672Q363.93199999999996 33.572 363.37399999999997 34.868Q362.816 36.164 362.816 37.784V38.828Q362.816 40.484 363.37399999999997 41.78Q363.93199999999996 43.076 364.99399999999997 43.976Q366.056 44.876 367.532 45.343999999999994Q369.008 45.812 370.84399999999994 45.812Z M404.53999999999996 51.14Q400.00399999999996 51.14 396.97999999999996 49.79Q393.95599999999996 48.44 392.42599999999993 45.866Q390.89599999999996 43.292 390.89599999999996 39.62V25.976H397.98799999999994V39.367999999999995Q397.98799999999994 42.391999999999996 399.698 44.102Q401.40799999999996 45.812 404.53999999999996 45.812Q407.70799999999997 45.812 409.4 44.102Q411.092 42.391999999999996 411.092 39.367999999999995V25.976H418.18399999999997V39.62Q418.18399999999997 43.292 416.67199999999997 45.866Q415.15999999999997 48.44 412.11799999999994 49.79Q409.07599999999996 51.14 404.53999999999996 51.14Z M424.01599999999996 50.708V25.976H442.87999999999994Q445.58 25.976 447.36199999999997 27.055999999999997Q449.14399999999995 28.136 450.044 29.936Q450.94399999999996 31.736 450.94399999999996 33.896Q450.94399999999996 36.272 449.84599999999995 38.18Q448.74799999999993 40.088 446.55199999999996 41.168L451.592 50.708H443.63599999999997L439.532 42.356H431.10799999999995V50.708ZM431.10799999999995 37.1H440.792Q442.12399999999997 37.1 442.91599999999994 36.290000000000006Q443.70799999999997 35.480000000000004 443.70799999999997 34.111999999999995Q443.70799999999997 33.176 443.34799999999996 32.546Q442.98799999999994 31.916 442.3399999999999 31.573999999999998Q441.69199999999995 31.232 440.792 31.232H431.10799999999995Z M152.0 85.988V61.256H159.092V80.264H174.032V85.988Z M177.812 85.988V61.256H202.11200000000002V66.584H184.94000000000003V70.868H199.952V76.016H184.94000000000003V80.66H202.4V85.988Z M204.73999999999998 85.988 216.11599999999999 61.256H224.144L235.51999999999998 85.988H227.88799999999998L226.124 81.92H213.77599999999998L212.048 85.988ZM216.00799999999998 76.7H223.892L221.768 71.624Q221.66 71.264 221.40800000000002 70.66999999999999Q221.156 70.076 220.904 69.374Q220.652 68.672 220.43599999999998 68.042Q220.22 67.412 220.112 67.05199999999999H219.82399999999998Q219.608 67.736 219.284 68.6Q218.95999999999998 69.464 218.654 70.292Q218.34799999999998 71.12 218.096 71.66Z M250.928 86.42Q243.836 86.42 240.25400000000002 83.25200000000001Q236.672 80.084 236.672 73.604Q236.672 69.356 238.526 66.512Q240.38 63.668000000000006 243.85399999999998 62.246Q247.328 60.824 252.26000000000002 60.824Q255.24800000000002 60.824 257.84000000000003 61.4Q260.432 61.976 262.394 63.11Q264.356 64.244 265.43600000000004 65.99000000000001Q266.516 67.736 266.516 70.076H259.604Q259.604 69.068 259.046 68.312Q258.488 67.556 257.48 67.088Q256.472 66.62 255.212 66.368Q253.952 66.116 252.548 66.116Q250.496 66.116 248.912 66.566Q247.328 67.016 246.212 67.88Q245.096 68.744 244.52 70.05799999999999Q243.94400000000002 71.372 243.94400000000002 73.064V74.144Q243.94400000000002 76.556 244.88 78.086Q245.816 79.616 247.63400000000001 80.354Q249.452 81.092 252.044 81.092Q254.348 81.092 256.04 80.624Q257.732 80.156 258.668 79.256Q259.604 78.356 259.604 77.096V76.88H251.54000000000002V72.236H266.552V85.988H262.41200000000003L261.728 83.144Q260.432 84.26 258.794 84.98Q257.156 85.7 255.19400000000002 86.06Q253.232 86.42 250.928 86.42Z M285.704 86.42Q281.168 86.42 278.144 85.07Q275.12 83.72 273.59000000000003 81.146Q272.06 78.572 272.06 74.9V61.256H279.152V74.648Q279.152 77.672 280.86199999999997 79.382Q282.572 81.092 285.704 81.092Q288.872 81.092 290.564 79.382Q292.25600000000003 77.672 292.25600000000003 74.648V61.256H299.348V74.9Q299.348 78.572 297.836 81.146Q296.324 83.72 293.28200000000004 85.07Q290.24 86.42 285.704 86.42Z M305.17999999999995 85.988V61.256H329.47999999999996V66.584H312.30799999999994V70.868H327.31999999999994V76.016H312.30799999999994V80.66H329.768V85.988Z"/></svg></h1>
+    <p class="lede">Futebol brasileiro em dados: cada partida do Brasileirão com xG, escalações, notas e estatísticas, e a simulação do resto da temporada.</p>
+  </section>
+  <section class="pick wrap" aria-labelledby="escolha">
+    <h2 class="ooyl-label" id="escolha">Escolha o campeonato</h2>
+    <div class="leagues">
+      <article class="league" data-api="/serie-a/api/index.json" data-root="/serie-a/">
+        <div class="league__head">
+          <p class="ooyl-kicker">Brasileirão <span data-year>2026</span></p>
+          <h3 class="league__name"><a class="league__link" href="/serie-a/">Série A</a></h3>
+          <p class="league__about">Tabela com xG, partidas, times, jogadores e a simulação do título ao rebaixamento.</p>
+        </div>
+        <dl class="league__stats" hidden>
+          <div><dt>Rodada</dt><dd><span data-round></span><small data-of></small></dd></div>
+          <div><dt>Partidas</dt><dd data-matches></dd></div>
+          <div><dt>Gols</dt><dd data-goals></dd></div>
+        </dl>
+        <p class="league__leader" hidden></p>
+        <p class="league__go" aria-hidden="true">Abrir a Série A ›</p>
+      </article>
+      <article class="league" data-api="/serie-b/api/index.json" data-root="/serie-b/">
+        <div class="league__head">
+          <p class="ooyl-kicker">Brasileirão <span data-year>2026</span></p>
+          <h3 class="league__name"><a class="league__link" href="/serie-b/">Série B</a></h3>
+          <p class="league__about">Tabela com xG, partidas, times, jogadores e a simulação do acesso e do rebaixamento.</p>
+        </div>
+        <dl class="league__stats" hidden>
+          <div><dt>Rodada</dt><dd><span data-round></span><small data-of></small></dd></div>
+          <div><dt>Partidas</dt><dd data-matches></dd></div>
+          <div><dt>Gols</dt><dd data-goals></dd></div>
+        </dl>
+        <p class="league__leader" hidden></p>
+        <p class="league__go" aria-hidden="true">Abrir a Série B ›</p>
+      </article>
+    </div>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>Dados do SofaScore, coletados partida a partida.</span>
+    <a class="handle" href="https://x.com/ooyl_br" rel="me">@ooyl_br</a>
+  </div>
+</footer>
+<script>
+(() => {
+  const root = document.documentElement;
+  // Tema: a mesma logica do botao dos dashboards, que dividem esta origem e esta chave.
+  document.getElementById("tema").addEventListener("click", () => {
+    const light = matchMedia("(prefers-color-scheme: light)").matches;
+    const now = root.getAttribute("data-theme") || (light ? "broadsheet" : "floodlight");
+    const next = now === "floodlight" ? "broadsheet" : "floodlight";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("tema", next); } catch (_) {}
+  });
+
+  const num = (n) => Number(n).toLocaleString("pt-BR");
+  const unit = (n, one, many) => num(n) + "\u00a0" + (Number(n) === 1 ? one : many);  // numero e unidade nao se separam
+
+  // Os numeros vem do api/index.json de cada liga, a mesma URL que o dashboard pede (o cache serve
+  // os dois). Sem o arquivo (404, liga ainda nao publicada) ou sem rede, o card fica so com o link.
+  for (const card of document.querySelectorAll(".league[data-api]")) {
+    fetch(card.dataset.api).then((res) => (res.ok ? res.json() : null)).then((d) => {
+      const rounds = d && Array.isArray(d.rounds) ? d.rounds : [];
+      const table = d && Array.isArray(d.table) ? d.table : [];
+      if (!rounds.length || !table.length) return;
+      const sum = (key) => rounds.reduce((s, r) => s + (Number(r[key]) || 0), 0);
+      card.querySelector("[data-round]").textContent = num(Math.max(...rounds.map((r) => Number(r.round) || 0)));
+      card.querySelector("[data-of]").textContent = "de " + 2 * (table.length - 1);
+      card.querySelector("[data-matches]").textContent = num(sum("matches"));
+      card.querySelector("[data-goals]").textContent = num(sum("goals"));
+      if (d.year) card.querySelector("[data-year]").textContent = d.year;
+      card.querySelector(".league__stats").hidden = false;
+
+      const lead = table[0], team = lead && lead.team;
+      if (!team) return;
+      const line = card.querySelector(".league__leader");
+      if (team.logo) {
+        const img = new Image(22, 22);
+        img.src = card.dataset.root + team.logo;
+        img.alt = "";
+        img.onerror = () => img.remove();
+        line.append(img);
+      }
+      const text = document.createElement("span"), who = document.createElement("b");
+      who.textContent = team.short || team.name;
+      text.append(who, " lidera com " + unit(lead.pts, "ponto", "pontos") + " em " + unit(lead.j, "jogo", "jogos"));
+      line.append(text);
+      line.hidden = false;
+    }).catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>
