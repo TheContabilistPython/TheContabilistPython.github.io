@@ -122,6 +122,10 @@ a { color: inherit; }
 .league__leader b { font-weight: 600; color: var(--ink-strong); }
 .league__go { margin-top: auto; font: 600 13px/1 var(--font-sans); color: var(--ink); }
 .league:hover .league__go { color: var(--accent); }
+/* a league not published yet: no link, so nothing reacts to the pointer; the script turns the card on
+   once the league's api/index.json answers */
+.league--breve:hover { background: var(--surface); border-color: var(--line); }
+.league--breve .league__go, .league--breve:hover .league__go { color: var(--ink-muted); }
 
 .foot { margin-top: auto; border-top: 1px solid var(--line); }
 .foot .wrap {

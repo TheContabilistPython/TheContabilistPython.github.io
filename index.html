@@ -61,10 +61,10 @@
         <p class="league__leader" hidden></p>
         <p class="league__go" aria-hidden="true">Abrir a Série A ›</p>
       </article>
-      <article class="league" data-api="/serie-b/api/index.json" data-root="/serie-b/">
+      <article class="league league--breve" data-api="/serie-b/api/index.json" data-root="/serie-b/">
         <div class="league__head">
           <p class="ooyl-kicker">Brasileirão <span data-year>2026</span></p>
-          <h3 class="league__name"><a class="league__link" href="/serie-b/">Série B</a></h3>
+          <h3 class="league__name">Série B</h3>
           <p class="league__about">Tabela com xG, partidas, times, jogadores e a simulação do acesso e do rebaixamento.</p>
         </div>
         <dl class="league__stats" hidden>
@@ -73,7 +73,7 @@
           <div><dt>Gols</dt><dd data-goals></dd></div>
         </dl>
         <p class="league__leader" hidden></p>
-        <p class="league__go" aria-hidden="true">Abrir a Série B ›</p>
+        <p class="league__go">Em breve</p>
       </article>
     </div>
   </section>
@@ -100,12 +100,24 @@
   const unit = (n, one, many) => num(n) + "\u00a0" + (Number(n) === 1 ? one : many);  // numero e unidade nao se separam
 
   // Os numeros vem do api/index.json de cada liga, a mesma URL que o dashboard pede (o cache serve
-  // os dois). Sem o arquivo (404, liga ainda nao publicada) ou sem rede, o card fica so com o link.
+  // os dois). Sem o arquivo ou sem rede, o card fica como veio: com o link, ou "Em breve" (league--breve)
+  // para a liga que ainda nao saiu. Essa acende sozinha, com link e numeros, quando o arquivo responder.
   for (const card of document.querySelectorAll(".league[data-api]")) {
     fetch(card.dataset.api).then((res) => (res.ok ? res.json() : null)).then((d) => {
       const rounds = d && Array.isArray(d.rounds) ? d.rounds : [];
       const table = d && Array.isArray(d.table) ? d.table : [];
       if (!rounds.length || !table.length) return;
+      if (card.classList.contains("league--breve")) {
+        const name = card.querySelector(".league__name"), link = document.createElement("a");
+        link.className = "league__link";
+        link.href = card.dataset.root;
+        link.textContent = name.textContent;
+        name.replaceChildren(link);
+        const go = card.querySelector(".league__go");
+        go.textContent = "Abrir a " + link.textContent + " ›";
+        go.setAttribute("aria-hidden", "true");
+        card.classList.remove("league--breve");
+      }
       const sum = (key) => rounds.reduce((s, r) => s + (Number(r[key]) || 0), 0);
       card.querySelector("[data-round]").textContent = num(Math.max(...rounds.map((r) => Number(r.round) || 0)));
       card.querySelector("[data-of]").textContent = "de " + 2 * (table.length - 1);
