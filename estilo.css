@@ -6,7 +6,8 @@
 @font-face { font-family: "Archivo"; src: url("/fonts/archivo.woff") format("woff"); font-weight: 100 900; font-display: swap; }
 @font-face { font-family: "Archivo Expanded"; src: url("/fonts/archivo-expanded.woff") format("woff"); font-weight: 100 900; font-display: swap; }
 @font-face { font-family: "JetBrains Mono"; src: url("/fonts/jetbrains-mono.woff") format("woff"); font-weight: 100 800; font-display: swap; }
-@font-face { font-family: "Instrument Serif"; src: url("/fonts/instrument-serif.woff") format("woff"); font-weight: 400; font-display: swap; }
+/* Newsreader is cut at the one weight the headlines use (600); its optical-size axis stays, so each size gets its own drawing. */
+@font-face { font-family: "Newsreader"; src: url("/fonts/newsreader.woff") format("woff"); font-weight: 600; font-display: swap; }
 
 /* ---- editions: Floodlight by default; Broadsheet when chosen, or when the OS is light and nothing is saved */
 :root, [data-theme="floodlight"] {
@@ -20,7 +21,7 @@
   --ground: #f4efe6; --surface: #fbf8f2; --surface-hover: #eee8dc; --line: #dad2c4; --line-strong: #8b8375;
   --ink: #16212b; --ink-strong: #16212b; --ink-muted: #6f685a; --data-dot: #16212b;
   --accent: #bd3a2a; --focus-ring: 0 0 0 2px #f4efe6, 0 0 0 4px #16212b;
-  --head-font: var(--font-serif); --head-case: none; --head-weight: 400; --head-track: -0.012em; --head-scale: 1.3;
+  --head-font: var(--font-serif); --head-case: none; --head-weight: 600; --head-track: -0.012em; --head-scale: 1.05;
   color-scheme: light;
 }
 @media (prefers-color-scheme: light) {
@@ -28,14 +29,14 @@
     --ground: #f4efe6; --surface: #fbf8f2; --surface-hover: #eee8dc; --line: #dad2c4; --line-strong: #8b8375;
     --ink: #16212b; --ink-strong: #16212b; --ink-muted: #6f685a; --data-dot: #16212b;
     --accent: #bd3a2a; --focus-ring: 0 0 0 2px #f4efe6, 0 0 0 4px #16212b;
-    --head-font: var(--font-serif); --head-case: none; --head-weight: 400; --head-track: -0.012em; --head-scale: 1.3;
+    --head-font: var(--font-serif); --head-case: none; --head-weight: 600; --head-track: -0.012em; --head-scale: 1.05;
     color-scheme: light;
   }
 }
 :root {
   --font-display: "Archivo Expanded", "Archivo", system-ui, sans-serif;
   --font-sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
   --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 72px;
   --radius-sm: 4px; --radius-md: 8px; --content-max: 1120px;

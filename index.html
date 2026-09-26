@@ -32,6 +32,11 @@
 </script>
 <link rel="preload" href="/fonts/archivo-expanded.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/estilo.css">
+<script>
+window.goatcounter = { path: () => location.pathname + location.hash };
+window.addEventListener("hashchange", () => window.goatcounter.count && window.goatcounter.count({ path: location.pathname + location.hash }));
+</script>
+<script data-goatcounter="https://ooyl.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <header class="top">
@@ -75,6 +80,34 @@
         <p class="league__leader" hidden></p>
         <p class="league__go">Em breve</p>
       </article>
+      <article class="league league--breve" data-api="/premier-league/api/index.json" data-root="/premier-league/" hidden>
+        <div class="league__head">
+          <p class="ooyl-kicker">Inglaterra <span data-year>26/27</span></p>
+          <h3 class="league__name">Premier League</h3>
+          <p class="league__about">Tabela com xG, partidas, times, jogadores e a simulação do título, das vagas europeias e do rebaixamento.</p>
+        </div>
+        <dl class="league__stats" hidden>
+          <div><dt>Rodada</dt><dd><span data-round></span><small data-of></small></dd></div>
+          <div><dt>Partidas</dt><dd data-matches></dd></div>
+          <div><dt>Gols</dt><dd data-goals></dd></div>
+        </dl>
+        <p class="league__leader" hidden></p>
+        <p class="league__go">Em breve</p>
+      </article>
+      <article class="league league--breve" data-api="/la-liga/api/index.json" data-root="/la-liga/" hidden>
+        <div class="league__head">
+          <p class="ooyl-kicker">Espanha <span data-year>26/27</span></p>
+          <h3 class="league__name">La Liga</h3>
+          <p class="league__about">Tabela com xG, partidas, times, jogadores e a simulação do título, das vagas europeias e do rebaixamento.</p>
+        </div>
+        <dl class="league__stats" hidden>
+          <div><dt>Rodada</dt><dd><span data-round></span><small data-of></small></dd></div>
+          <div><dt>Partidas</dt><dd data-matches></dd></div>
+          <div><dt>Gols</dt><dd data-goals></dd></div>
+        </dl>
+        <p class="league__leader" hidden></p>
+        <p class="league__go">Em breve</p>
+      </article>
     </div>
   </section>
 </main>
@@ -102,11 +135,14 @@
   // Os numeros vem do api/index.json de cada liga, a mesma URL que o dashboard pede (o cache serve
   // os dois). Sem o arquivo ou sem rede, o card fica como veio: com o link, ou "Em breve" (league--breve)
   // para a liga que ainda nao saiu. Essa acende sozinha, com link e numeros, quando o arquivo responder.
+  // Uma liga ainda nao anunciada vem tambem com hidden (Premier League e La Liga): fica fora da pagina
+  // ate o arquivo dela responder, como no servidor local (publicar_inicio.py --servir).
   for (const card of document.querySelectorAll(".league[data-api]")) {
     fetch(card.dataset.api).then((res) => (res.ok ? res.json() : null)).then((d) => {
       const rounds = d && Array.isArray(d.rounds) ? d.rounds : [];
       const table = d && Array.isArray(d.table) ? d.table : [];
       if (!rounds.length || !table.length) return;
+      card.hidden = false;
       if (card.classList.contains("league--breve")) {
         const name = card.querySelector(".league__name"), link = document.createElement("a");
         link.className = "league__link";
