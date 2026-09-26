@@ -41,6 +41,9 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
 <body>
 <header class="top">
   <div class="wrap">
+    <select class="lang-select" id="idioma" aria-label="Idioma" title="Idioma">
+      <option value="pt">PT</option><option value="en">EN</option><option value="es">ES</option>
+    </select>
     <button class="ooyl-btn" id="tema" type="button" title="Alternar entre a edição escura e a clara">Tema</button>
   </div>
 </header>
@@ -129,8 +132,85 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
     try { localStorage.setItem("tema", next); } catch (_) {}
   });
 
-  const num = (n) => Number(n).toLocaleString("pt-BR");
-  const unit = (n, one, many) => num(n) + "\u00a0" + (Number(n) === 1 ? one : many);  // numero e unidade nao se separam
+  // Idioma: a mesma chave "idioma" dos dashboards desta origem, entao a escolha feita aqui abre a Serie A no
+  // mesmo idioma, e vice-versa; ?lang= escolhe e guarda. O portugues da pagina e a chave das traducoes.
+  const LOCALES = { pt: "pt-BR", en: "en-GB", es: "es-ES" };
+  const lang = (() => {
+    let chosen = new URLSearchParams(location.search).get("lang");
+    try {
+      if (LOCALES[chosen]) localStorage.setItem("idioma", chosen);
+      else chosen = localStorage.getItem("idioma");
+    } catch (_) {}
+    return LOCALES[chosen] ? chosen : "pt";
+  })();
+  const WORDS = {
+    en: {
+      "Out of Your League · Brasileirão em dados": "Out of Your League · The Brasileirão in data",
+      "Idioma": "Language", "Tema": "Theme",
+      "Alternar entre a edição escura e a clara": "Switch between the dark and the light edition",
+      "Futebol brasileiro em dados: cada partida do Brasileirão com xG, escalações, notas e estatísticas, e a simulação do resto da temporada.":
+        "Brazilian football in data: every Brasileirão match with xG, line-ups, ratings and statistics, and the simulation of the rest of the season.",
+      "Escolha o campeonato": "Choose the league",
+      "Tabela com xG, partidas, times, jogadores e a simulação do título ao rebaixamento.":
+        "Table with xG, matches, teams, players and the simulation from the title to relegation.",
+      "Tabela com xG, partidas, times, jogadores e a simulação do acesso e do rebaixamento.":
+        "Table with xG, matches, teams, players and the simulation of promotion and relegation.",
+      "Tabela com xG, partidas, times, jogadores e a simulação do título, das vagas europeias e do rebaixamento.":
+        "Table with xG, matches, teams, players and the simulation of the title, the European places and relegation.",
+      "Rodada": "Round", "Partidas": "Matches", "Gols": "Goals", "Em breve": "Coming soon",
+      "Inglaterra": "England", "Espanha": "Spain", "Abrir a Série A ›": "Open Série A ›", "Abrir a {liga} ›": "Open {liga} ›",
+      "Dados do SofaScore, coletados partida a partida.": "Data from SofaScore, collected match by match.",
+      "de {n}": "of {n}", " lidera com {pontos} em {jogos}": " lead with {pontos} from {jogos}",
+      "ponto": "point", "pontos": "points", "jogo": "match", "jogos": "matches",
+    },
+    es: {
+      "Out of Your League · Brasileirão em dados": "Out of Your League · El Brasileirão en datos",
+      "Idioma": "Idioma", "Tema": "Tema",
+      "Alternar entre a edição escura e a clara": "Alternar entre la edición oscura y la clara",
+      "Futebol brasileiro em dados: cada partida do Brasileirão com xG, escalações, notas e estatísticas, e a simulação do resto da temporada.":
+        "Fútbol brasileño en datos: cada partido del Brasileirão con xG, alineaciones, notas y estadísticas, y la simulación del resto de la temporada.",
+      "Escolha o campeonato": "Elige el campeonato",
+      "Tabela com xG, partidas, times, jogadores e a simulação do título ao rebaixamento.":
+        "Tabla con xG, partidos, equipos, jugadores y la simulación del título al descenso.",
+      "Tabela com xG, partidas, times, jogadores e a simulação do acesso e do rebaixamento.":
+        "Tabla con xG, partidos, equipos, jugadores y la simulación del ascenso y el descenso.",
+      "Tabela com xG, partidas, times, jogadores e a simulação do título, das vagas europeias e do rebaixamento.":
+        "Tabla con xG, partidos, equipos, jugadores y la simulación del título, las plazas europeas y el descenso.",
+      "Rodada": "Jornada", "Partidas": "Partidos", "Gols": "Goles", "Em breve": "Próximamente",
+      "Inglaterra": "Inglaterra", "Espanha": "España", "Abrir a Série A ›": "Abrir la Série A ›", "Abrir a {liga} ›": "Abrir {liga} ›",
+      "Dados do SofaScore, coletados partida a partida.": "Datos de SofaScore, recopilados partido a partido.",
+      "de {n}": "de {n}", " lidera com {pontos} em {jogos}": " lidera con {pontos} en {jogos}",
+      "ponto": "punto", "pontos": "puntos", "jogo": "partido", "jogos": "partidos",
+    },
+  }[lang] || {};
+  const t = (text, vars) => {
+    const out = WORDS[text] || text;
+    return vars ? out.replace(/\{(\w+)\}/g, (slot, key) => (key in vars ? vars[key] : slot)) : out;
+  };
+  root.lang = LOCALES[lang];
+  if (lang !== "pt") {  // o markup fixo, com os espacos dobrados, e os rotulos
+    document.title = t(document.title);
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const text = node.nodeValue.replace(/\s+/g, " ").trim();
+      if (text && WORDS[text]) node.nodeValue = node.nodeValue.match(/^\s*/)[0] + WORDS[text] + node.nodeValue.match(/\s*$/)[0];
+    }
+    document.querySelectorAll("[title], [aria-label]").forEach((node) => ["title", "aria-label"].forEach((name) => {
+      const v = node.getAttribute(name);
+      if (v && WORDS[v]) node.setAttribute(name, WORDS[v]);
+    }));
+  }
+  const pick = document.getElementById("idioma");
+  pick.value = lang;
+  pick.addEventListener("change", () => {
+    try { localStorage.setItem("idioma", pick.value); } catch (_) {}
+    const url = new URL(location.href);
+    if (pick.value === "pt") url.searchParams.delete("lang"); else url.searchParams.set("lang", pick.value);
+    location.replace(url.href);
+  });
+
+  const num = (n) => Number(n).toLocaleString(LOCALES[lang]);
+  const unit = (n, one, many) => num(n) + "\u00a0" + t(Number(n) === 1 ? one : many);  // numero e unidade nao se separam
 
   // Os numeros vem do api/index.json de cada liga, a mesma URL que o dashboard pede (o cache serve
   // os dois). Sem o arquivo ou sem rede, o card fica como veio: com o link, ou "Em breve" (league--breve)
@@ -150,13 +230,13 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
         link.textContent = name.textContent;
         name.replaceChildren(link);
         const go = card.querySelector(".league__go");
-        go.textContent = "Abrir a " + link.textContent + " ›";
+        go.textContent = t("Abrir a {liga} ›", { liga: link.textContent });
         go.setAttribute("aria-hidden", "true");
         card.classList.remove("league--breve");
       }
       const sum = (key) => rounds.reduce((s, r) => s + (Number(r[key]) || 0), 0);
       card.querySelector("[data-round]").textContent = num(Math.max(...rounds.map((r) => Number(r.round) || 0)));
-      card.querySelector("[data-of]").textContent = "de " + 2 * (table.length - 1);
+      card.querySelector("[data-of]").textContent = t("de {n}", { n: 2 * (table.length - 1) });
       card.querySelector("[data-matches]").textContent = num(sum("matches"));
       card.querySelector("[data-goals]").textContent = num(sum("goals"));
       if (d.year) card.querySelector("[data-year]").textContent = d.year;
@@ -174,7 +254,7 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       }
       const text = document.createElement("span"), who = document.createElement("b");
       who.textContent = team.short || team.name;
-      text.append(who, " lidera com " + unit(lead.pts, "ponto", "pontos") + " em " + unit(lead.j, "jogo", "jogos"));
+      text.append(who, t(" lidera com {pontos} em {jogos}", { pontos: unit(lead.pts, "ponto", "pontos"), jogos: unit(lead.j, "jogo", "jogos") }));
       line.append(text);
       line.hidden = false;
     }).catch(() => {});
