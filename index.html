@@ -113,6 +113,24 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       </article>
     </div>
   </section>
+  <section class="pick wrap" aria-labelledby="analise" hidden>
+    <h2 class="ooyl-label" id="analise">Análise de jogadores</h2>
+    <div class="leagues">
+      <article class="league league--breve" data-scouting="/scouting/api/ligas.json" data-root="/scouting/">
+        <div class="league__head">
+          <p class="ooyl-kicker" data-kicker>Brasileirão 2026</p>
+          <h3 class="league__name">Scouting</h3>
+          <p class="league__about">Ranking de jogadores por posição e função, jovens, comparação lado a lado e montagem de seleção com química e estilo de jogo.</p>
+        </div>
+        <dl class="league__stats" hidden>
+          <div><dt>Jogadores</dt><dd data-players></dd></div>
+          <div><dt>Ligas</dt><dd data-leagues></dd></div>
+          <div><dt>Partidas</dt><dd data-games></dd></div>
+        </dl>
+        <p class="league__go">Em breve</p>
+      </article>
+    </div>
+  </section>
 </main>
 <footer class="foot">
   <div class="wrap">
@@ -162,6 +180,10 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       "Dados do SofaScore, coletados partida a partida.": "Data from SofaScore, collected match by match.",
       "de {n}": "of {n}", " lidera com {pontos} em {jogos}": " lead with {pontos} from {jogos}",
       "ponto": "point", "pontos": "points", "jogo": "match", "jogos": "matches",
+      "Análise de jogadores": "Player analysis", "Jogadores": "Players", "Ligas": "Leagues",
+      "Abrir o scouting ›": "Open the scouting ›",
+      "Ranking de jogadores por posição e função, jovens, comparação lado a lado e montagem de seleção com química e estilo de jogo.":
+        "Player rankings by position and role, young players, side-by-side comparisons and a line-up builder with chemistry and playing style.",
     },
     es: {
       "Out of Your League · Brasileirão em dados": "Out of Your League · El Brasileirão en datos",
@@ -181,6 +203,10 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       "Dados do SofaScore, coletados partida a partida.": "Datos de SofaScore, recopilados partido a partido.",
       "de {n}": "de {n}", " lidera com {pontos} em {jogos}": " lidera con {pontos} en {jogos}",
       "ponto": "punto", "pontos": "puntos", "jogo": "partido", "jogos": "partidos",
+      "Análise de jogadores": "Análisis de jugadores", "Jogadores": "Jugadores", "Ligas": "Ligas",
+      "Abrir o scouting ›": "Abrir el scouting ›",
+      "Ranking de jogadores por posição e função, jovens, comparação lado a lado e montagem de seleção com química e estilo de jogo.":
+        "Ranking de jugadores por posición y función, jóvenes, comparación lado a lado y armado de equipo con química y estilo de juego.",
     },
   }[lang] || {};
   const t = (text, vars) => {
@@ -257,6 +283,29 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       text.append(who, t(" lidera com {pontos} em {jogos}", { pontos: unit(lead.pts, "ponto", "pontos"), jogos: unit(lead.j, "jogo", "jogos") }));
       line.append(text);
       line.hidden = false;
+    }).catch(() => {});
+  }
+  // O scouting (/scouting/) acende do mesmo jeito, com a lista de ligas dele: a secao inteira fica fora
+  // da pagina ate o arquivo responder.
+  for (const card of document.querySelectorAll(".league[data-scouting]")) {
+    fetch(card.dataset.scouting).then((res) => (res.ok ? res.json() : null)).then((list) => {
+      if (!Array.isArray(list) || !list.length) return;
+      const name = card.querySelector(".league__name"), link = document.createElement("a");
+      link.className = "league__link";
+      link.href = card.dataset.root;
+      link.textContent = name.textContent;
+      name.replaceChildren(link);
+      const go = card.querySelector(".league__go");
+      go.textContent = t("Abrir o scouting ›");
+      go.setAttribute("aria-hidden", "true");
+      card.classList.remove("league--breve");
+      const total = (key) => list.reduce((sum, item) => sum + (Number(item[key]) || 0), 0);
+      card.querySelector("[data-kicker]").textContent = list.map((item) => item.nome).join(" · ");
+      card.querySelector("[data-players]").textContent = num(total("total"));
+      card.querySelector("[data-leagues]").textContent = num(list.length);
+      card.querySelector("[data-games]").textContent = num(total("jogos"));
+      card.querySelector(".league__stats").hidden = false;
+      card.closest("section").hidden = false;
     }).catch(() => {});
   }
 })();

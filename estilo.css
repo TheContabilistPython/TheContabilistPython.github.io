@@ -78,7 +78,7 @@ a { color: inherit; }
 }
 .lang-select:hover { color: var(--ink); }
 .lang-select:focus-visible { outline: none; box-shadow: var(--focus-ring); }
-.lang-select option { color: #0A0C0F; }
+.lang-select option { background: var(--surface); color: var(--ink); }  /* the open list, in the edition's colours */
 
 .hero { padding-top: var(--space-6); padding-bottom: var(--space-7); }  /* top and bottom only: the sides are .wrap's */
 @media (min-width: 720px) { .hero { padding-top: var(--space-7); padding-bottom: var(--space-8); } }
