@@ -129,6 +129,14 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
         </dl>
         <p class="league__go">Em breve</p>
       </article>
+      <article class="league league--breve" data-draft="/draft/api/ligas.json" data-root="/draft/">
+        <div class="league__head">
+          <p class="ooyl-kicker" data-kicker>Brasileirão 2026</p>
+          <h3 class="league__name">Draft</h3>
+          <p class="league__about">Monte um time com cartas dos jogadores, dentro de um orçamento, e jogue uma Copa simulada no formato da Copa do Brasil.</p>
+        </div>
+        <p class="league__go">Em breve</p>
+      </article>
     </div>
   </section>
 </main>
@@ -184,6 +192,9 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       "Abrir o scouting ›": "Open the scouting ›",
       "Ranking de jogadores por posição e função, jovens, comparação lado a lado e montagem de seleção com química e estilo de jogo.":
         "Player rankings by position and role, young players, side-by-side comparisons and a line-up builder with chemistry and playing style.",
+      "Jogar o draft ›": "Play the draft ›",
+      "Monte um time com cartas dos jogadores, dentro de um orçamento, e jogue uma Copa simulada no formato da Copa do Brasil.":
+        "Build a team of player cards within a budget and play a simulated cup in the Copa do Brasil's format.",
     },
     es: {
       "Out of Your League · Brasileirão em dados": "Out of Your League · El Brasileirão en datos",
@@ -207,6 +218,9 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       "Abrir o scouting ›": "Abrir el scouting ›",
       "Ranking de jogadores por posição e função, jovens, comparação lado a lado e montagem de seleção com química e estilo de jogo.":
         "Ranking de jugadores por posición y función, jóvenes, comparación lado a lado y armado de equipo con química y estilo de juego.",
+      "Jogar o draft ›": "Jugar el draft ›",
+      "Monte um time com cartas dos jogadores, dentro de um orçamento, e jogue uma Copa simulada no formato da Copa do Brasil.":
+        "Arma un equipo con cartas de jugadores, dentro de un presupuesto, y juega una copa simulada con el formato de la Copa do Brasil.",
     },
   }[lang] || {};
   const t = (text, vars) => {
@@ -305,6 +319,23 @@ window.addEventListener("hashchange", () => window.goatcounter.count && window.g
       card.querySelector("[data-leagues]").textContent = num(list.length);
       card.querySelector("[data-games]").textContent = num(total("jogos"));
       card.querySelector(".league__stats").hidden = false;
+      card.closest("section").hidden = false;
+    }).catch(() => {});
+  }
+  // O Draft (/draft/) usa a mesma lista de ligas do scouting: acende com link quando ela responder.
+  for (const card of document.querySelectorAll(".league[data-draft]")) {
+    fetch(card.dataset.draft).then((res) => (res.ok ? res.json() : null)).then((list) => {
+      if (!Array.isArray(list) || !list.length) return;
+      const name = card.querySelector(".league__name"), link = document.createElement("a");
+      link.className = "league__link";
+      link.href = card.dataset.root;
+      link.textContent = name.textContent;
+      name.replaceChildren(link);
+      const go = card.querySelector(".league__go");
+      go.textContent = t("Jogar o draft ›");
+      go.setAttribute("aria-hidden", "true");
+      card.classList.remove("league--breve");
+      card.querySelector("[data-kicker]").textContent = list.map((item) => item.nome).join(" · ");
       card.closest("section").hidden = false;
     }).catch(() => {});
   }
