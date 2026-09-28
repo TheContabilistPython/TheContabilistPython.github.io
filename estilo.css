@@ -14,6 +14,7 @@
   --ground: #0a0c0f; --surface: #12161b; --surface-hover: #161a20; --line: #20262e; --line-strong: #606a78;
   --ink: #f3f3ef; --ink-strong: #ffffff; --ink-muted: #7f8995; --data-dot: #e8e8e3;
   --accent: #c6f24e; --focus-ring: 0 0 0 2px #0a0c0f, 0 0 0 4px #c6f24e;
+  --action: #c6f24e; --on-action: #0a0c0f; --action-hover: #d4f57a;
   --head-font: var(--font-display); --head-case: uppercase; --head-weight: 800; --head-track: -0.005em; --head-scale: 1;
   color-scheme: dark;
 }
@@ -21,6 +22,7 @@
   --ground: #f4efe6; --surface: #fbf8f2; --surface-hover: #eee8dc; --line: #dad2c4; --line-strong: #8b8375;
   --ink: #16212b; --ink-strong: #16212b; --ink-muted: #6f685a; --data-dot: #16212b;
   --accent: #bd3a2a; --focus-ring: 0 0 0 2px #f4efe6, 0 0 0 4px #16212b;
+  --action: #16212b; --on-action: #f4efe6; --action-hover: #3a4450;
   --head-font: var(--font-serif); --head-case: none; --head-weight: 600; --head-track: -0.012em; --head-scale: 1.05;
   color-scheme: light;
 }
@@ -29,6 +31,7 @@
     --ground: #f4efe6; --surface: #fbf8f2; --surface-hover: #eee8dc; --line: #dad2c4; --line-strong: #8b8375;
     --ink: #16212b; --ink-strong: #16212b; --ink-muted: #6f685a; --data-dot: #16212b;
     --accent: #bd3a2a; --focus-ring: 0 0 0 2px #f4efe6, 0 0 0 4px #16212b;
+    --action: #16212b; --on-action: #f4efe6; --action-hover: #3a4450;
     --head-font: var(--font-serif); --head-case: none; --head-weight: 600; --head-track: -0.012em; --head-scale: 1.05;
     color-scheme: light;
   }
@@ -80,17 +83,20 @@ a { color: inherit; }
 .lang-select:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 .lang-select option { background: var(--surface); color: var(--ink); }  /* the open list, in the edition's colours */
 
-.hero { padding-top: var(--space-6); padding-bottom: var(--space-7); }  /* top and bottom only: the sides are .wrap's */
-@media (min-width: 720px) { .hero { padding-top: var(--space-7); padding-bottom: var(--space-8); } }
+/* The brand above the menus, and nothing between them: the sites are what the page is for. */
+.hero { padding-top: var(--space-3); padding-bottom: var(--space-6); }  /* top and bottom only: the sides are .wrap's */
+@media (min-width: 720px) { .hero { padding-top: var(--space-5); padding-bottom: var(--space-7); } }
 .logo { margin: 0; line-height: 0; }
-.logo svg { display: block; width: min(100%, 540px); height: auto; }
+.logo svg { display: block; width: min(78%, 420px); height: auto; }
 .logo__ring { fill: none; stroke: var(--data-dot); }
 .logo__dot { fill: var(--accent); }
 .logo__text { fill: var(--ink); }
-.lede { margin: var(--space-6) 0 0; max-width: 56ch; font-size: 17px; line-height: 1.55; color: var(--ink-muted); }
-
-.pick { padding-bottom: var(--space-8); }
-.pick > .ooyl-label { margin-bottom: var(--space-4); }
+.pick { padding-bottom: var(--space-7); }
+.pick > h2.ooyl-label {  /* each group of sites titled in the edition's headline voice */
+  margin-bottom: var(--space-4); color: var(--ink-strong); letter-spacing: var(--head-track);
+  font-family: var(--head-font); font-weight: var(--head-weight); text-transform: var(--head-case);
+  font-size: calc(22px * var(--head-scale)); line-height: 1.1;
+}
 .leagues { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 720px) { .leagues { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); } }
 
@@ -101,6 +107,7 @@ a { color: inherit; }
   padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md);
   transition: background-color .12s ease, border-color .12s ease;
 }
+@media (max-width: 719px) { .league { padding: var(--space-4) var(--space-4) var(--space-5); gap: var(--space-4); } }
 @media (min-width: 720px) { .league { padding: var(--space-6); } }
 .league:hover { background: var(--surface-hover); border-color: var(--line-strong); }
 .league:focus-within { box-shadow: var(--focus-ring); }
@@ -130,12 +137,17 @@ a { color: inherit; }
 .league__leader { margin: 0; display: flex; align-items: center; gap: var(--space-2); font-size: 14px; line-height: 20px; color: var(--ink); }
 .league__leader img { width: 22px; height: 22px; object-fit: contain; flex: none; }
 .league__leader b { font-weight: 600; color: var(--ink-strong); }
-.league__go { margin-top: auto; font: 600 13px/1 var(--font-sans); color: var(--ink); }
-.league:hover .league__go { color: var(--accent); }
+/* the way in, as the system's primary button: the whole card clicks, and this says where it goes */
+.league__go {
+  margin: auto 0 0; align-self: flex-start; display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-4);
+  border-radius: var(--radius-sm); background: var(--action); color: var(--on-action); font: 600 14px/1 var(--font-sans);
+  transition: background-color .12s ease;
+}
+.league:hover .league__go { background: var(--action-hover); }
 /* a league not published yet: no link, so nothing reacts to the pointer; the script turns the card on
    once the league's api/index.json answers */
 .league--breve:hover { background: var(--surface); border-color: var(--line); }
-.league--breve .league__go, .league--breve:hover .league__go { color: var(--ink-muted); }
+.league--breve .league__go, .league--breve:hover .league__go { background: none; color: var(--ink-muted); box-shadow: inset 0 0 0 1px var(--line-strong); }
 
 .foot { margin-top: auto; border-top: 1px solid var(--line); }
 .foot .wrap {
